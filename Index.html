@@ -857,39 +857,42 @@ footer a {
         <h2>DEPLOY CODE</h2>
         <p>Github Workflow Deploy Code.(6H Limit Break)</p>
         <div class="code-wrapper">
-            <pre><code id="cmd1">name: Node.js CI
-  
-  on:
-    push:
-      branches:
-        - main
-    pull_request:
-      branches:
-        - main
-  
-  jobs:
-    build:
-  
-      runs-on: ubuntu-latest
-  
-      strategy:
-        matrix:
-          node-version: [20.x]
-  
-      steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-  
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+            <pre><code id="cmd1">name: Deploy KING-SANDESH-MD Bot
+
+on:
+  push:
+    branches:
+      - V-2
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-  
-      - name: Install dependencies
+          node-version: 18
+
+      - name: 📦 Install Dependencies
         run: npm install
-  
-      - name: Start application
-        run: npm start</code></pre>
+
+      - name: 🔨 Build Project (if needed)
+        run: |
+          if [ -f package.json ] && grep -q '"build"' package.json; then
+            npm run build
+          else
+            echo "No build step found."
+          fi
+
+      - name: 🚀 Start Bot with PM2
+        run: |
+          npm install -g pm2
+          pm2 start index.js --name KING-SANDESH-MD || pm2 restart KING-SANDESH-MD
+</code></pre>
             <button class="copy-btn" data-target="cmd1" aria-label="Copy command 1">Copy This</button>
           </div>       
     </div>
